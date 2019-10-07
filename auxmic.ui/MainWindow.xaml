@@ -1,0 +1,272 @@
+﻿<Window x:Class="auxmic.ui.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:auxmic.ui.controls"
+        Title="auxmic" Height="350" Width="525" MinHeight="350" MinWidth="525" Loaded="Window_Loaded">
+
+    <Window.Resources>
+
+        <Style x:Key="main_window">
+            <Setter Property="Control.Background" Value="#4b4d4e"/>
+            <Setter Property="Control.Foreground" Value="#C6C8C8"/>
+        </Style>
+
+        <Style x:Key="font">
+            <Setter Property="Control.Foreground" Value="#C6C8C8"/>
+        </Style>
+
+        <Style x:Key="border">
+            <Setter Property="Border.Background" Value="#585b5b"/>
+            <Setter Property="Border.BorderBrush" Value="#596063"/>
+            <Setter Property="Border.Effect">
+                <Setter.Value>
+                    <DropShadowEffect ShadowDepth="0" BlurRadius="2" />
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Border.BorderThickness" Value="1"/>
+            <Setter Property="Border.Margin" Value="5"/>
+        </Style>
+
+        <Style x:Key="menu">
+            <Setter Property="Control.Background" Value="#333434"/>
+            <Setter Property="Control.Foreground" Value="#C6C8C8"/>
+        </Style>
+
+        <Style x:Key="container_margin">
+            <Setter Property="Control.Margin" Value="0,2.5,0,2.5"/>
+        </Style>
+
+        <!--<Style x:Key="hq_items" BasedOn="{StaticResource container_margin}">
+            <Setter Property="Control.Background" Value="#585b5b"/>
+        </Style>-->
+
+        <Style x:Key="button_panel">
+            <Setter Property="StackPanel.Background" Value="#58595a"/>
+            <Setter Property="StackPanel.Height" Value="30"/>
+        </Style>
+
+        <!--http://stackoverflow.com/questions/5167867/progress-bar-with-dynamic-text-text-color-update?lq=1-->
+        <local:RectConverter x:Key="RectConverter"/>
+
+        <Style x:Key="progress_bar" TargetType="{x:Type ProgressBar}">
+            <Setter Property="Background" Value="#747573"/>
+            <Setter Property="Foreground" Value="#428cc2"/>
+            <Setter Property="BorderBrush" Value="#58595A"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="0, 2.5, 0, 2.5"/>
+            <Setter Property="Height" Value="24"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ProgressBar}">
+                        <Grid x:Name="TemplateRoot" SnapsToDevicePixels="true">
+                            <TextBlock Text="{TemplateBinding Tag}" Grid.ZIndex="2" Foreground="Black"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"/>
+                            <TextBlock Text="{TemplateBinding Tag}"
+                                Grid.ZIndex="3" Foreground="White"
+                                Width="{Binding ElementName=rectangle, Path=ActualWidth}"
+                                TextAlignment="Center"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center">
+                                <TextBlock.Clip>
+                                    <RectangleGeometry>
+                                        <RectangleGeometry.Rect>
+                                            <MultiBinding Converter="{StaticResource RectConverter}">
+                                                <Binding ElementName="Indicator" Path="ActualWidth"/>
+                                                <Binding ElementName="Indicator" Path="ActualHeight"/>
+                                            </MultiBinding>
+                                        </RectangleGeometry.Rect>
+                                    </RectangleGeometry>
+                                </TextBlock.Clip>
+                            </TextBlock>
+                            <Rectangle x:Name="rectangle" Fill="{TemplateBinding Background}" RadiusY="2" RadiusX="2"/>
+                            <Rectangle x:Name="PART_Track" Margin="1"/>
+                            <Decorator x:Name="PART_Indicator" HorizontalAlignment="Left" Margin="1">
+                                <Grid x:Name="Foreground">
+                                    <Rectangle x:Name="Indicator" Fill="{TemplateBinding Foreground}"/>
+                                    <Grid x:Name="Animation" ClipToBounds="true">
+                                        <Border Name="PART_GlowRect" HorizontalAlignment="Left" Margin="0,0,0,0" Width="60" Background="{TemplateBinding Foreground}"/>
+                                    </Grid>
+                                </Grid>
+                            </Decorator>
+                            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="0"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <DataTrigger Binding="{Binding Path=IsMatching}" Value="True">
+                                <Setter Property="Background" Value="#428cc2"/>
+                                <Setter Property="Foreground" Value="#32cd32"/>
+                            </DataTrigger>
+                            <Trigger Property="IsIndeterminate" Value="true">
+                                <Setter Property="Visibility" TargetName="Indicator" Value="Collapsed"/>
+                            </Trigger>
+                            <Trigger Property="IsIndeterminate" Value="false">
+                                <Setter Property="Visibility" TargetName="Animation" Value="Collapsed"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <ControlTemplate x:Key="ButtonTemplate" TargetType="{x:Type Button}">
+            <Border
+                Name="Border"
+                Height="24"
+                BorderBrush="#333434" 
+                BorderThickness="1" 
+                CornerRadius="0"
+                TextBlock.Foreground="#C6C8C8" 
+                Background="#595b5b"
+                Padding="4, 2, 4, 2">
+                <ContentPresenter RecognizesAccessKey="True" Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalAlignment}" ></ContentPresenter>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="Border" Property="Background" Value="#626465" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter TargetName="Border" Property="Background" Value="#3f4041" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter TargetName="Border" Property="Opacity" Value="0.4" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <DataTemplate x:Key="ClipItemTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <ProgressBar Name="progress"
+                    Grid.Column="0" 
+                    Style="{StaticResource progress_bar}" 
+                    Minimum="0"
+                    Maximum="{Binding Path=MaxProgressValue}"
+                    Value="{Binding Path=ProgressValue}"
+                    Tag="{Binding Path=DisplayName}"
+                    IsIndeterminate="{Binding Path=IsLoading}">
+                </ProgressBar>
+                <Button 
+                    Grid.Column="1" 
+                    Width="25" 
+                    HorizontalAlignment="Center" 
+                    Template="{StaticResource ButtonTemplate}"
+                    Tag="{Binding}"
+                    Click="cmdRemoveItem_Click"
+                    Margin="2.5, 0, 2.5, 0"
+                    ToolTip="Remove">X</Button>
+                <Button 
+                    Grid.Column="2" 
+                    HorizontalAlignment="Center" 
+                    Template="{StaticResource ButtonTemplate}"
+                    Tag="{Binding}"
+                    Click="cmdSaveMatch_Click"
+                    Margin="2.5, 0, 2.5, 0" 
+                    ToolTip="Save matched file"
+                    IsEnabled="{Binding Path=IsMatched}">Save</Button>
+                <TextBox
+                    Grid.Column="3"
+                    Width="80"
+                    Height="24"
+                    Margin="2.5, 0, 2.5, 0" 
+                    BorderBrush="#333434" 
+                    BorderThickness="1" 
+                    TextBlock.Foreground="#C6C8C8" 
+                    Background="#595b5b"
+                    Padding="4, 2, 4, 2"
+                    Text="{Binding Path=Offset, StringFormat={}{0:g}}"
+                    IsReadOnly="True"
+                    ToolTip="Offset from master record">
+                </TextBox>
+            </Grid>
+        </DataTemplate>
+
+        <Style x:Key="lq_items">
+            <Setter Property="Control.Background" Value="#58595a"/>
+            <Setter Property="Control.BorderThickness" Value="0"/>
+            <Setter Property="Control.Padding" Value="0,2.5,0,2.5"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=Items.Count}" Value="0">
+                    <Setter Property="ListBox.Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <TextBlock Style="{StaticResource font}" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{TemplateBinding ToolTip}"></TextBlock>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <RoutedUICommand x:Key="SetMaster" Text="Set master media" />
+        <RoutedUICommand x:Key="AddLQ" Text="Add files to sync" />
+        <RoutedUICommand x:Key="OpenCacheFolder" Text="Open cache folder" />
+        <RoutedUICommand x:Key="ClearCache" Text="Clear cache" />
+        <RoutedUICommand x:Key="About" Text="About" />
+
+    </Window.Resources>
+
+    <Window.CommandBindings>
+        <CommandBinding Command="{StaticResource SetMaster}" Executed="cmd_AddMaster"></CommandBinding>
+        <CommandBinding Command="{StaticResource AddLQ}" Executed="cmd_AddLQ"></CommandBinding>
+        <CommandBinding Command="{StaticResource OpenCacheFolder}" Executed="cmd_OpenCacheFolder"></CommandBinding>
+        <CommandBinding Command="{StaticResource ClearCache}" Executed="cmd_ClearCache"></CommandBinding>
+        <CommandBinding Command="{StaticResource About}" Executed="cmd_About"></CommandBinding>
+    </Window.CommandBindings>
+
+    <Grid Style="{StaticResource main_window}">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Menu Grid.Row="0" Background="#585b5b" Foreground="#C6C8C8" BorderBrush="#596063" BorderThickness="0, 0, 0, 1" Margin="0, 0, 0, 5">
+            <Menu.Effect>
+                <DropShadowEffect ShadowDepth="0" BlurRadius="2" />
+            </Menu.Effect>
+            <!--  Style="{StaticResource menu}" -->
+            <MenuItem Header="File">
+                <MenuItem Header="Set master media" Command="{StaticResource SetMaster}" Foreground="#596063"></MenuItem>
+                <MenuItem Header="Add files to sync" Command="{StaticResource AddLQ}" Foreground="#596063"></MenuItem>
+                <Separator />
+                <MenuItem Header="Open cache folder" Command="{StaticResource OpenCacheFolder}" Foreground="#596063"></MenuItem>
+                <MenuItem Header="Clear cache" Command="{StaticResource ClearCache}" Foreground="#596063"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Help">
+                <MenuItem Header="About" Command="{StaticResource About}" Foreground="#596063"></MenuItem>
+            </MenuItem>
+        </Menu>
+
+        <Border Style="{StaticResource border}" Grid.Row="1" AllowDrop="True" Drop="MasterPanel_Drop">
+            <ListBox
+                Name="HQItems"
+                MinHeight="40"
+                Style="{StaticResource lq_items}"
+                ItemTemplate="{StaticResource ClipItemTemplate}"
+                HorizontalContentAlignment="Stretch"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                ToolTip="Step 1: drop master file here">
+                Step 1: drop master file here or click to select
+            </ListBox>
+        </Border>
+
+        <Border Style="{StaticResource border}" Grid.Row="2" AllowDrop="True" Drop="LQItems_Drop">
+            <ListBox 
+                Name="LQItems"
+                Style="{StaticResource lq_items}"
+                ItemTemplate="{StaticResource ClipItemTemplate}"
+                HorizontalContentAlignment="Stretch"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                ToolTip="Step 2: drop other media files here">
+                Step 2: drop other media files here or click to select
+            </ListBox>
+        </Border>
+        
+    </Grid>
+</Window>
