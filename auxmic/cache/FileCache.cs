@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Cryptography;
 
 namespace auxmic
 {
@@ -48,6 +48,20 @@ namespace auxmic
                 if (!cacheRoot.Exists)
                     cacheRoot.Create();
             }
+        }
+
+        /// <summary>
+        /// Генерация имени временного файла. Формат имени временного файла: '<original_mediafile_name>.<original_mediafile_extension>.<hash>.wav'
+        /// </summary>
+        /// <param name="filename">Полный путь к обрабатываемому медиафайлу.</param>
+        /// <returns></returns>
+        internal static string ComposeTempFilename(string filename)
+        {
+            // считаем хэш по полному пути обрабатываемого файла
+            // необходимо для различия извлечённых WAV-файлов во временной директории (см. #1)
+            string filenameHash = Hash(filename);
+
+            return Path.Combine(FileCache.CacheRootPath, GetExtractedWavFilename(filename, filenameHash));
         }
 
         static FileCache()
@@ -164,10 +178,30 @@ namespace auxmic
 
         internal static string GetTempFilename(string filename, int sampleRate)
         {
-            return String.Format("{0}.{1}.{2}", 
+            return String.Format("{0}.{1}.{2}",
                                 Path.GetFileName(filename),
                                 sampleRate,
                                 FileCache.TempExtension);
+        }
+
+        private static string GetExtractedWavFilename(string filename, string hash)
+        {
+            return String.Format("{0}.{1}.wav",
+                                Path.GetFileName(filename),
+                                hash);
+        }
+
+        /// <summary>
+        /// Первые 7 символов SHA1 хэша.
+        /// </summary>
+        /// <param name="stringToHash">Строка по которой будет посчитан хэш</param>
+        /// <returns></returns>
+        public static string Hash(string stringToHash)
+        {
+            using (SHA1Managed sha1 = new SHA1Managed())
+            {
+                return BitConverter.ToString(sha1.ComputeHash(Encoding.UTF8.GetBytes(stringToHash))).Replace("-", "").Substring(0, 7).ToLower();
+            }
         }
     }
 }

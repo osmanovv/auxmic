@@ -1,6 +1,5 @@
 ﻿using System;
 using NAudio.Wave;
-using System.IO;
 using System.Numerics;
 
 namespace auxmic
@@ -26,7 +25,8 @@ namespace auxmic
         internal SoundFile(string filename, WaveFormat resampleFormat)
         {
             this.Filename = filename;
-            this.TempFilename = Path.ChangeExtension(Path.Combine(FileCache.CacheRootPath, Path.GetFileName(filename)), "wav");
+            this.TempFilename = FileCache.ComposeTempFilename(filename);
+                
 
             ExtractAndResampleAudio(resampleFormat);
 
