@@ -104,7 +104,7 @@ namespace auxmic
                 reader.Position = startPos;
                 byte[] buffer = new byte[1024];
 
-                while (reader.Position < endPos)
+                while (reader.Position < Math.Min(endPos, reader.Length))
                 {
                     int bytesRequired = (int)(endPos - reader.Position);
                     if (bytesRequired > 0)
@@ -114,6 +114,10 @@ namespace auxmic
                         if (bytesRead > 0)
                         {
                             writer.Write(buffer, 0, bytesRead);
+                        }
+                        else
+                        {
+                            break;
                         }
                     }
                 }
