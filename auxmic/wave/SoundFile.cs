@@ -101,7 +101,11 @@ namespace auxmic
             using (var reader = new WaveFileReader(this.TempFilename))
             using (var writer = new WaveFileWriter(filename, this.WaveFormat))
             {
-                reader.Position = startPos;
+                // if there is a negative offset from master record
+                // start exporting from the beginning of the master
+                // see issue #5:
+                //   ArgumentOutOfRangeException while exporting synced file with negative offset
+                reader.Position = startPos >= 0 ? startPos : 0;
                 byte[] buffer = new byte[1024];
 
                 while (reader.Position < Math.Min(endPos, reader.Length))
