@@ -13,6 +13,12 @@ The only purpose is to help you synchronize audio from external microphone with 
 
 RELEASE NOTES
 -------------
+auxmic v0.8.0.103 [2020-06-05]
+
+  + Fixed crash on processing files with the same names (but different extensions) #1
+  + Fixed application hang while exporting synched audio #2
+  + Fixed ArgumentOutOfRangeException while exporting synced file with negative offset #5
+  + NAudio updated to v1.10.0
 
 auxmic v0.8.0.XXXXXXX [2018-02-21]
 
