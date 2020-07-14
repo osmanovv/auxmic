@@ -13,6 +13,12 @@ namespace auxmic
 {
     public sealed class Clip : INotifyPropertyChanged
     {
+        // HRESULT: 0xC00D36C4 (-1072875836)
+        private const int MF_MEDIA_ENGINE_ERR_SRC_NOT_SUPPORTED = -1072875836;
+
+        // HRESULT: 0x20 (-2147024864)
+        private const int ERROR_SHARING_VIOLATION = -2147024864;
+
         #region PROPERTIES & FIELDS
         /// <summary>
         /// Параметры синхронизации клипа
@@ -340,9 +346,6 @@ namespace auxmic
             {
                 this.CancellationTokenSource.Cancel();
 
-                // HRESULT: 0xC00D36C4 (-1072875836) - 
-                int MF_MEDIA_ENGINE_ERR_SRC_NOT_SUPPORTED = -1072875836;
-
                 if (ex.ErrorCode == MF_MEDIA_ENGINE_ERR_SRC_NOT_SUPPORTED)
                 {
                     throw new NotSupportedException(String.Format("'{0}' not supported.", this.DisplayName), ex);
@@ -560,7 +563,18 @@ namespace auxmic
         {
             if (this.SoundFile != null && File.Exists(this.SoundFile.TempFilename))
             {
-                File.Delete(this.SoundFile.TempFilename);
+                try
+                {
+                    File.Delete(this.SoundFile.TempFilename);
+                }
+                catch (IOException ex)
+                {
+                    // if the file is used by another instance, do not throw exception
+                    if (ex.HResult != ERROR_SHARING_VIOLATION)
+                    {
+                        throw;
+                    }
+                }
             }
         }
 
@@ -619,8 +633,8 @@ namespace auxmic
 
                 int matchesCount = 0;
 
-                for (int intersectionIndexHQ = intersectionStart; 
-                     intersectionIndexHQ < intersectionLength + intersectionStart; 
+                for (int intersectionIndexHQ = intersectionStart;
+                     intersectionIndexHQ < intersectionLength + intersectionStart;
                      intersectionIndexHQ++)
                 {
                     int intersectionIndexLQ = intersectionIndexHQ - hq_idx;

@@ -51,6 +51,16 @@ namespace auxmic
         }
 
         /// <summary>
+        /// Checks if this file already exists
+        /// </summary>
+        /// <param name="filename">File name to check</param>
+        /// <returns></returns>
+        internal static bool Exists(string filename)
+        {
+            return File.Exists(filename);
+        }
+
+        /// <summary>
         /// Генерация имени временного файла. Формат имени временного файла: '<original_mediafile_name>.<original_mediafile_extension>.<hash>.wav'
         /// </summary>
         /// <param name="filename">Полный путь к обрабатываемому медиафайлу.</param>

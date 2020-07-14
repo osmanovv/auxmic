@@ -26,10 +26,13 @@ namespace auxmic
         {
             this.Filename = filename;
             this.TempFilename = FileCache.ComposeTempFilename(filename);
-                
 
-            ExtractAndResampleAudio(resampleFormat);
-
+            // if such file already exists, do not create it again
+            if (!FileCache.Exists(this.TempFilename))
+            {
+                ExtractAndResampleAudio(resampleFormat);
+            }
+            
             ReadWave(this.TempFilename);
         }
 
