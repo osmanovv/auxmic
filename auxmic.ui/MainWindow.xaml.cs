@@ -5,6 +5,7 @@ using System.IO;
 using System.Windows.Data;
 using System.ComponentModel;
 using System;
+using System.Windows.Controls.Primitives;
 
 namespace auxmic.ui
 {
@@ -106,11 +107,31 @@ namespace auxmic.ui
             _clipSynchronizer.Cancel(clipToCancel);
         }
 
-        private void cmdSaveMatch_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Show context menu on left click.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cmdExportButton_Click(object sender, RoutedEventArgs e)
         {
-            Button saveMatchButton = (Button)sender;
+            Button exportButton = (Button)sender;
 
-            Clip clip = (Clip)saveMatchButton.Tag;
+            exportButton.ContextMenu.PlacementTarget = exportButton;
+            exportButton.ContextMenu.Placement = PlacementMode.Bottom;
+            exportButton.ContextMenu.StaysOpen = true;
+            exportButton.ContextMenu.IsOpen = true;
+        }
+
+        /// <summary>
+        /// Export synchronized audio
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cmdExportMatch_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem mi = (MenuItem)sender;
+
+            Clip clip = (Clip)mi.DataContext;
 
             SaveFileDialog saveFileDialog = new SaveFileDialog()
             {
@@ -123,6 +144,23 @@ namespace auxmic.ui
             {
                 _clipSynchronizer.Save(clip, saveFileDialog.FileName);
             }
+        }
+
+        /// <summary>
+        /// Export media with synchronized audio (FFmpeg)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cmdExportMediaWithSynchronizedAudio_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem mi = (MenuItem)sender;
+
+            Clip clip = (Clip)mi.DataContext;
+
+            // check if there FFmpeg installed
+
+            // export media
+            MessageBox.Show("Comming soon.", "Not yet implemented", MessageBoxButton.OK);
         }
 
         private void cmd_AddMaster(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)

@@ -44,6 +44,9 @@ namespace auxmic
 
             this.Master = new Clip(masterFilename, _syncParams);
 
+            // disable export button for high quality audio source
+            this.Master.DisplayExportControls = false;
+
             this.MasterClips.Add(Master);
 
             // может существовать раннее созданная задача, которая завершает обработку
@@ -114,6 +117,9 @@ namespace auxmic
             _loadMasterTask.Wait();
 
             Clip clip = new Clip(LQfilename, this._syncParams, this.Master.WaveFormat);
+
+            // enable export button for clip
+            clip.DisplayExportControls = true;
 
             this.LQClips.Add(clip);
 

@@ -251,6 +251,12 @@ namespace auxmic
                 return this.SoundFile.WaveFormat;
             }
         }
+
+        /// <summary>
+        /// Controls if there will be button to export synchronized result.
+        /// For hiqh quality source export should be disabled.
+        /// </summary>
+        public bool DisplayExportControls { get; internal set; }
         #endregion
 
         #region EVENTS

@@ -6,6 +6,8 @@
 
     <Window.Resources>
 
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+
         <Style x:Key="main_window">
             <Setter Property="Control.Background" Value="#4b4d4e"/>
             <Setter Property="Control.Foreground" Value="#C6C8C8"/>
@@ -164,10 +166,20 @@
                     HorizontalAlignment="Center" 
                     Template="{StaticResource ButtonTemplate}"
                     Tag="{Binding}"
-                    Click="cmdSaveMatch_Click"
+                    Click="cmdExportButton_Click"
                     Margin="2.5, 0, 2.5, 0" 
-                    ToolTip="Save matched file"
-                    IsEnabled="{Binding Path=IsMatched}">Save</Button>
+                    ToolTip="Export matched WAV-file"
+                    ContextMenuService.Placement="Bottom"
+                    IsEnabled="{Binding Path=IsMatched}"
+                    Visibility="{Binding Path=DisplayExportControls, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Button.ContextMenu>
+                        <ContextMenu HorizontalAlignment="Right">
+                            <MenuItem Header="Synchronized audio (corresponding to this media file)" Click="cmdExportMatch_Click"></MenuItem>
+                            <MenuItem Header="Media with synchronized audio (FFmpeg needed)" Click="cmdExportMediaWithSynchronizedAudio_Click"></MenuItem>
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                    Export ▾
+                </Button>
                 <TextBox
                     Grid.Column="3"
                     Width="80"
@@ -180,7 +192,8 @@
                     Padding="4, 2, 4, 2"
                     Text="{Binding Path=Offset, StringFormat={}{0:g}}"
                     IsReadOnly="True"
-                    ToolTip="Offset from master record">
+                    ToolTip="Offset from hiqh quality source"
+                    Visibility="{Binding Path=DisplayExportControls, Converter={StaticResource BoolToVisibilityConverter}}">
                 </TextBox>
             </Grid>
         </DataTemplate>
@@ -202,8 +215,8 @@
             </Style.Triggers>
         </Style>
 
-        <RoutedUICommand x:Key="SetMaster" Text="Set master media" />
-        <RoutedUICommand x:Key="AddLQ" Text="Add files to sync" />
+        <RoutedUICommand x:Key="SetMaster" Text="Set high quality audio source" />
+        <RoutedUICommand x:Key="AddLQ" Text="Add media to synchronize" />
         <RoutedUICommand x:Key="OpenCacheFolder" Text="Open cache folder" />
         <RoutedUICommand x:Key="ClearCache" Text="Clear cache" />
         <RoutedUICommand x:Key="About" Text="About" />
@@ -232,8 +245,8 @@
             </Menu.Effect>
             <!--  Style="{StaticResource menu}" -->
             <MenuItem Header="File">
-                <MenuItem Header="Set master media" Command="{StaticResource SetMaster}" Foreground="#596063"></MenuItem>
-                <MenuItem Header="Add files to sync" Command="{StaticResource AddLQ}" Foreground="#596063"></MenuItem>
+                <MenuItem Header="Set high quality audio source" Command="{StaticResource SetMaster}" Foreground="#596063"></MenuItem>
+                <MenuItem Header="Add media to synchronize" Command="{StaticResource AddLQ}" Foreground="#596063"></MenuItem>
                 <Separator />
                 <MenuItem Header="Open cache folder" Command="{StaticResource OpenCacheFolder}" Foreground="#596063"></MenuItem>
                 <MenuItem Header="Clear cache" Command="{StaticResource ClearCache}" Foreground="#596063"></MenuItem>
@@ -251,8 +264,8 @@
                 ItemTemplate="{StaticResource ClipItemTemplate}"
                 HorizontalContentAlignment="Stretch"
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                ToolTip="Step 1: drop master file here">
-                Step 1: drop master file here or click to select
+                ToolTip="Step 1: Drop high quality audio source here">
+                Step 1: Drop high quality audio source here or click to select
             </ListBox>
         </Border>
 
@@ -263,10 +276,10 @@
                 ItemTemplate="{StaticResource ClipItemTemplate}"
                 HorizontalContentAlignment="Stretch"
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                ToolTip="Step 2: drop other media files here">
-                Step 2: drop other media files here or click to select
+                ToolTip="Step 2: Drop media to synchronize here">
+                Step 2: Drop media to synchronize here or click to select
             </ListBox>
         </Border>
-        
+
     </Grid>
 </Window>
