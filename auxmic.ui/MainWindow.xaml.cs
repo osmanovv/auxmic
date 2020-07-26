@@ -153,14 +153,29 @@ namespace auxmic.ui
         /// <param name="e"></param>
         private void cmdExportMediaWithSynchronizedAudio_Click(object sender, RoutedEventArgs e)
         {
+            // TODO: check if there FFmpeg installed
+
             MenuItem mi = (MenuItem)sender;
 
             Clip clip = (Clip)mi.DataContext;
 
-            // check if there FFmpeg installed
+            string ext = Path.GetExtension(clip.Filename);
+            
+            SaveFileDialog saveFileDialog = new SaveFileDialog()
+            {
+                Filter = $"{ext}|*{ext}",
+                DefaultExt = ext,
+                FileName = Path.GetFileNameWithoutExtension(clip.Filename) + "_synced"
+            };
 
-            // export media
-            MessageBox.Show("Comming soon.", "Not yet implemented", MessageBoxButton.OK);
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                // export media
+                FFmpegTool ffmpeg = new FFmpegTool(@"C:\ffmpeg\ffmpeg.exe");
+                ffmpeg.Export(clip.Filename, _clipSynchronizer.Master.Filename, clip.Offset, saveFileDialog.FileName);
+            }
+
+            MessageBox.Show("Synced video exported.", "File exported", MessageBoxButton.OK);
         }
 
         private void cmd_AddMaster(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
