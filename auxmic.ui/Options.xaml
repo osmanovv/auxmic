@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:auxmic.ui"
         xmlns:p="clr-namespace:auxmic.ui.Properties"
         mc:Ignorable="d"
-        Title="Options" Height="250" Width="600" ResizeMode="CanResize" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner">
+        Title="Options" Height="250" Width="500" MinHeight="250" MinWidth="500" ResizeMode="CanResize" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner">
 
     <Window.Resources>
 
