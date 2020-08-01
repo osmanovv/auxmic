@@ -518,12 +518,14 @@ namespace auxmic
         }
 
         /// <summary>
-        /// Метод запуска синхронизации файла.
+        /// Starts synching with master record.
         /// </summary>
-        /// <param name="master"></param>
+        /// <param name="master">A Clip this recording will sync with</param>
         internal void Sync(Clip master)
         {
-            SetProgressMax(master.Hashes.Length);
+            // since synch consider that files may not completely overlap,
+            // use the maximum possible length of both files
+            SetProgressMax(master.Hashes.Length+this.Hashes.Length-1);
 
             this.StartIndex = Match(master);
 
