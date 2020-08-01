@@ -220,6 +220,7 @@
         <RoutedUICommand x:Key="OpenCacheFolder" Text="Open cache folder" />
         <RoutedUICommand x:Key="ClearCache" Text="Clear cache" />
         <RoutedUICommand x:Key="About" Text="About" />
+        <RoutedUICommand x:Key="Options" Text="Options" />
 
     </Window.Resources>
 
@@ -229,6 +230,7 @@
         <CommandBinding Command="{StaticResource OpenCacheFolder}" Executed="cmd_OpenCacheFolder"></CommandBinding>
         <CommandBinding Command="{StaticResource ClearCache}" Executed="cmd_ClearCache"></CommandBinding>
         <CommandBinding Command="{StaticResource About}" Executed="cmd_About"></CommandBinding>
+        <CommandBinding Command="{StaticResource Options}" Executed="cmd_Options"></CommandBinding>
     </Window.CommandBindings>
 
     <Grid Style="{StaticResource main_window}">
@@ -250,6 +252,8 @@
                 <Separator />
                 <MenuItem Header="Open cache folder" Command="{StaticResource OpenCacheFolder}" Foreground="#596063"></MenuItem>
                 <MenuItem Header="Clear cache" Command="{StaticResource ClearCache}" Foreground="#596063"></MenuItem>
+                <Separator />
+                <MenuItem Header="Options" Command="{StaticResource Options}" Foreground="#596063"></MenuItem>
             </MenuItem>
             <MenuItem Header="Help">
                 <MenuItem Header="About" Command="{StaticResource About}" Foreground="#596063"></MenuItem>

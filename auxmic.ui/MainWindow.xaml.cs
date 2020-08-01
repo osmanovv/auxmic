@@ -153,7 +153,18 @@ namespace auxmic.ui
         /// <param name="e"></param>
         private void cmdExportMediaWithSynchronizedAudio_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: check if there FFmpeg installed
+            // check if there FFmpeg installed
+            string ffmpegExePath = Properties.Settings.Default.FFMPEG_EXE_PATH;
+            if (String.IsNullOrEmpty(ffmpegExePath))
+            {
+                MessageBox.Show("Full path to FFmpeg executable file `ffmpeg.exe` not set. Open `File-Options` dialog to set it.", "FFmpeg not set", MessageBoxButton.OK);
+                return;
+            }
+            else if (!File.Exists(ffmpegExePath))
+            {
+                MessageBox.Show("Full path to FFmpeg executable file `ffmpeg.exe` not found. Open `File-Options` dialog to set it.", "FFmpeg not found", MessageBoxButton.OK);
+                return;
+            }
 
             MenuItem mi = (MenuItem)sender;
 
@@ -171,11 +182,11 @@ namespace auxmic.ui
             if (saveFileDialog.ShowDialog() == true)
             {
                 // export media
-                FFmpegTool ffmpeg = new FFmpegTool(@"C:\ffmpeg\ffmpeg.exe");
+                FFmpegTool ffmpeg = new FFmpegTool(ffmpegExePath);
                 ffmpeg.Export(clip.Filename, _clipSynchronizer.Master.Filename, clip.Offset, saveFileDialog.FileName);
             }
 
-            MessageBox.Show("Synced video exported.", "File exported", MessageBoxButton.OK);
+            //MessageBox.Show("Synced video exported.", "File exported", MessageBoxButton.OK);
         }
 
         private void cmd_AddMaster(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
@@ -212,6 +223,18 @@ namespace auxmic.ui
             About about = new About();
             about.Owner = this;
             about.ShowDialog();
+        }
+
+        /// <summary>
+        /// Open Options window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cmd_Options(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
+        {
+            Options options = new Options();
+            options.Owner = this;
+            options.ShowDialog();
         }
 
         private void cmd_OpenCacheFolder(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
