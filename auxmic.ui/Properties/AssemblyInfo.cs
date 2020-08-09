@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyTitle("auxmic.ui")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Vladislav Osmanov")]
+[assembly: AssemblyCompany("auxmic")]
 [assembly: AssemblyProduct("auxmic")]
 [assembly: AssemblyCopyright("Copyright © 2014-2020 Vladislav Osmanov")]
 [assembly: AssemblyTrademark("")]
@@ -54,6 +54,6 @@ using System.Windows;
 
 // см. http://stackoverflow.com/questions/12176/svn-revision-version-in-net-assembly-w-out-cc-net
 // http://www.codeproject.com/Articles/27874/Use-Subversion-Revision-Numbers-in-your-Visual-Stu
-[assembly: AssemblyVersion("0.8.0.103")]
-[assembly: AssemblyFileVersion("0.8.0.103")]
+[assembly: AssemblyVersion("0.8.1.115")]
+[assembly: AssemblyFileVersion("0.8.1.115")]
 //[assembly: AssemblyInformationalVersion("Build date: 2017-01-26 21:02:40; Revision date: 2017-01-21 16:04:51; Revision(s) in working copy: 95:97; WARNING working copy had uncommitted modifications.")]

@@ -1,7 +1,7 @@
 ﻿auxmic
 http://auxmic.com
 
-Copyright © 2014-2017 Vladislav Osmanov
+Copyright © 2014-2020 Vladislav Osmanov
 info@auxmic.com
 
 
@@ -13,6 +13,13 @@ The only purpose is to help you synchronize audio from external microphone with 
 
 RELEASE NOTES
 -------------
+auxmic v0.8.1.115 [2020-08-09]
+
+  + Improved usability (#6)
+  + Added ability to export synchronized file with `FFmpeg` (#7)
+  + Fixed multiple instances run (#11)
+  + Fixed progress display (while matching files) (#17)
+
 auxmic v0.8.0.103 [2020-06-05]
 
   + Fixed crash on processing files with the same names (but different extensions) #1
